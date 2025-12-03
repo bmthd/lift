@@ -122,7 +122,7 @@ export const createHoistableComponent = () => {
    * Provider component for the hoistable component.
    */
   const Provider = ({ children }: ProviderProps): JSX.Element => {
-    const store = useMemo(createLiftStore, []);
+    const store = useMemo(() => createLiftStore(), []);
     return <LiftStoreContext.Provider value={store}>{children}</LiftStoreContext.Provider>;
   };
 
