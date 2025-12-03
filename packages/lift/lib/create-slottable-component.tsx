@@ -120,7 +120,7 @@ export const createHoistableComponent = () => {
     const s = useContext(LiftStoreContext);
     if (!s) {
       throw new Error(
-        "Provider not found. Please wrap your component tree with a Provider component.",
+        "Hoistable Provider not found. Please wrap your component tree with `<Hoistable.Provider>` (e.g. `<HeaderAction.Provider>`).",
       );
     }
     return s;
