@@ -12,18 +12,29 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v5
+      
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      
       - name: Setup node
         uses: actions/setup-node@v5
         with:
           node-version: '22.x'
-          cache: npm
           registry-url: 'https://registry.npmjs.org'
-      - name: Install npm packages
-        run: npm ci
+      
+      - name: Install dependencies
+        run: bun install
+      
+      - name: Build packages
+        run: cd packages/lift && bun run build
+      
       - name: Publish to npm 
-        run: npm publish --access public
+        run: cd packages/lift && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+      
       - name: Generate release note
         uses: softprops/action-gh-release@v2
         with:
