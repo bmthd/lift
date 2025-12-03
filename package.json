@@ -1,6 +1,7 @@
 {
-  "name": "lift",
+  "name": "lift-monorepo",
   "version": "0.3.2",
+  "private": true,
   "description": "React component for headings",
   "keywords": [
     "react",
@@ -15,31 +16,19 @@
   "homepage": "https://github.com/bmthd/lift",
   "type": "module",
   "workspaces": [
+    "packages/*",
     "demo/*"
   ],
-  "files": [
-    "/dist"
-  ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
-  },
   "scripts": {
-    "dev": "vite",
-    "build": "tsdown",
-    "format:test": "biome format ./lib",
-    "format:fix": "biome format --write ./lib",
-    "lint:test": "biome lint ./lib",
-    "lint:safe-fix": "biome check --apply ./lib",
-    "lint:fix": "biome check --apply-unsafe ./lib",
-    "test": "vitest",
-    "prepublishOnly": "npm run build"
+    "build": "bun run build:packages",
+    "build:packages": "bun run --filter packages/* build",
+    "dev": "bun run --filter demo/* dev",
+    "format:test": "biome format ./packages",
+    "format:fix": "biome format --write ./packages",
+    "lint:test": "biome lint ./packages",
+    "lint:safe-fix": "biome check --apply ./packages",
+    "lint:fix": "biome check --apply-unsafe ./packages",
+    "test": "bun run --filter packages/* test"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
@@ -49,21 +38,11 @@
     "@types/react": "^18.3.2",
     "@vitejs/plugin-react": "^5.0.0",
     "happy-dom": "^18.0.0",
+    "lift": "workspace:*",
     "tsdown": "^0.17.0-beta.6",
     "typescript": "^5.4.5",
     "vite": "^7.0.0",
     "vite-plugin-dts": "^4.0.0",
     "vitest": "^3.0.0"
-  },
-  "peerDependencies": {
-    "react": ">=17.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@types/react": {
-      "optional": true
-    },
-    "react": {
-      "optional": true
-    }
   }
 }
