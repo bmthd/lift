@@ -5,13 +5,13 @@
       "name": "lift",
       "devDependencies": {
         "@biomejs/biome": "^2.2.4",
+        "@bmthd/lift": "workspace:*",
         "@testing-library/jest-dom": "^6.4.5",
         "@testing-library/react": "^16.0.0",
         "@types/node": "^22.0.0",
         "@types/react": "^18.3.2",
         "@vitejs/plugin-react": "^5.0.0",
         "happy-dom": "^18.0.0",
-        "lift": "workspace:packages/lift",
         "tsdown": "^0.17.0-beta.6",
         "typescript": "^5.4.5",
         "vite": "^7.0.0",
@@ -23,7 +23,7 @@
       "name": "nextjs-createhoistablecomponent-demo",
       "version": "0.1.0",
       "dependencies": {
-        "lift": "workspace:*",
+        "@bmthd/lift": "workspace:*",
         "next": "15.5.3",
         "react": "^19",
         "react-dom": "^19",
@@ -41,8 +41,8 @@
       },
     },
     "packages/lift": {
-      "name": "lift",
-      "version": "0.3.2",
+      "name": "@bmthd/lift",
+      "version": "0.1.0",
       "devDependencies": {
         "@biomejs/biome": "^2.2.4",
         "@testing-library/jest-dom": "^6.4.5",
@@ -127,6 +127,8 @@
     "@biomejs/cli-win32-arm64": ["@biomejs/cli-win32-arm64@2.2.4", "", { "os": "win32", "cpu": "arm64" }, "sha512-NXnfTeKHDFUWfxAefa57DiGmu9VyKi0cDqFpdI+1hJWQjGJhJutHPX0b5m+eXvTKOaf+brU+P0JrQAZMb5yYaQ=="],
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.2.4", "", { "os": "win32", "cpu": "x64" }, "sha512-3Y4V4zVRarVh/B/eSHczR4LYoSVyv3Dfuvm3cWs5w/HScccS0+Wt/lHOcDTRYeHjQmMYVC3rIRWqyN2EI52+zg=="],
+
+    "@bmthd/lift": ["@bmthd/lift@workspace:packages/lift"],
 
     "@emnapi/core": ["@emnapi/core@1.7.1", "", { "dependencies": { "@emnapi/wasi-threads": "1.1.0", "tslib": "^2.4.0" } }, "sha512-o1uhUASyo921r2XtHYOHy7gdkGLge8ghBEQHMWmyJFoXlpU58kIrhhN3w26lpQb6dspetweapMn2CSNwQ8I4wg=="],
 
@@ -981,8 +983,6 @@
     "language-tags": ["language-tags@1.0.9", "", { "dependencies": { "language-subtag-registry": "^0.3.20" } }, "sha512-MbjN408fEndfiQXbFQ1vnd+1NoLDsnQW41410oQBXiyXDMYH5z505juWa4KUE1LqxRC7DgOgZDbKLxHIwm27hA=="],
 
     "levn": ["levn@0.4.1", "", { "dependencies": { "prelude-ls": "^1.2.1", "type-check": "~0.4.0" } }, "sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ=="],
-
-    "lift": ["lift@workspace:packages/lift"],
 
     "lightningcss": ["lightningcss@1.30.1", "", { "dependencies": { "detect-libc": "^2.0.3" }, "optionalDependencies": { "lightningcss-darwin-arm64": "1.30.1", "lightningcss-darwin-x64": "1.30.1", "lightningcss-freebsd-x64": "1.30.1", "lightningcss-linux-arm-gnueabihf": "1.30.1", "lightningcss-linux-arm64-gnu": "1.30.1", "lightningcss-linux-arm64-musl": "1.30.1", "lightningcss-linux-x64-gnu": "1.30.1", "lightningcss-linux-x64-musl": "1.30.1", "lightningcss-win32-arm64-msvc": "1.30.1", "lightningcss-win32-x64-msvc": "1.30.1" } }, "sha512-xi6IyHML+c9+Q3W0S4fCQJOym42pyurFiJUHEcEyHS0CeKzia4yZDEsLlqOFykxOdHpNy0NmvVO31vcSqAxJCg=="],
 

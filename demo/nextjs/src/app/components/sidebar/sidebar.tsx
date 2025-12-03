@@ -1,5 +1,5 @@
 "use client";
 
-import { createHoistableComponent } from "lift";
+import { createHoistableComponent } from "@bmthd/lift";
 
 export const SidebarContent = createHoistableComponent();
