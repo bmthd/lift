@@ -1,13 +1,15 @@
 import {
+  createContext,
   Fragment,
   type JSX,
   type PropsWithChildren,
+  type ReactNode,
+  useContext,
   useEffect,
   useMemo,
   useRef,
   useSyncExternalStore,
 } from "react";
-import { createLiftStore, LiftStoreContext, useLiftStore } from "./store.ts";
 
 export interface ProviderProps extends PropsWithChildren {}
 
@@ -50,6 +52,70 @@ export interface HoistProps extends PropsWithChildren {
  * @returns An object containing the `Provider`, `Slot`, and `Hoist` components.
  */
 export const createHoistableComponent = () => {
+  type Entry = Readonly<{ key: symbol; node: ReactNode; order: number }>;
+  type Snapshot = readonly Entry[];
+
+  type Store = {
+    getSnapshot: () => Snapshot;
+    subscribe: (l: () => void) => () => void;
+    upsert: (key: symbol, node: ReactNode, order: number) => void;
+    remove: (key: symbol) => void;
+  };
+
+  const createLiftStore = (): Store => {
+    const map = new Map<symbol, { node: ReactNode; order: number }>();
+    const listeners = new Set<() => void>();
+
+    const notify = () => {
+      for (const listener of listeners) {
+        listener();
+      }
+    };
+
+    const getSnapshot = (): Snapshot => {
+      const entries = Array.from(map.entries()).map(
+        ([key, v]) => ({ key, node: v.node, order: v.order }) as Entry,
+      );
+      return entries.sort((a, b) => a.order - b.order);
+    };
+
+    const subscribe = (l: () => void): (() => void) => {
+      listeners.add(l);
+      return () => listeners.delete(l);
+    };
+
+    const upsert = (key: symbol, node: ReactNode, order: number): void => {
+      const prev = map.get(key);
+      if (prev && prev.node === node && prev.order === order) {
+        return;
+      }
+      map.set(key, { node, order });
+      notify();
+    };
+
+    const remove = (key: symbol): void => {
+      if (!map.has(key)) {
+        return;
+      }
+      map.delete(key);
+      notify();
+    };
+
+    return { getSnapshot, subscribe, upsert, remove };
+  };
+
+  const LiftStoreContext = createContext<Store | null>(null);
+
+  const useLiftStore = (): Store => {
+    const s = useContext(LiftStoreContext);
+    if (!s) {
+      throw new Error(
+        "SlotProvider not found. Please wrap your component tree with <SlotProvider>.",
+      );
+    }
+    return s;
+  };
+
   /**
    * Provider component for the hoistable component.
    */
