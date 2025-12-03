@@ -20,19 +20,19 @@
   "files": [
     "/dist"
   ],
-  "main": "./dist/index.umd.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.umd.cjs"
+      "require": "./dist/index.cjs"
     }
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsc",
+    "build": "tsdown",
     "format:test": "biome format ./lib",
     "format:fix": "biome format --write ./lib",
     "lint:test": "biome lint ./lib",
@@ -49,6 +49,7 @@
     "@types/react": "^18.3.2",
     "@vitejs/plugin-react": "^5.0.0",
     "happy-dom": "^18.0.0",
+    "tsdown": "^0.17.0-beta.6",
     "typescript": "^5.4.5",
     "vite": "^7.0.0",
     "vite-plugin-dts": "^4.0.0",
