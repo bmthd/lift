@@ -39,31 +39,34 @@ export interface HoistProps extends PropsWithChildren {
  * function MainContent() {
  *   return (
  *     <div>
- *       <HeaderAction.Hoist>
+ *       <HeaderAction.Hoist priority={1}>
  *         <button>This button renders in the header</button>
+ *       </HeaderAction.Hoist>
+ *       <HeaderAction.Hoist priority={2}>
+ *         <button>This button renders second</button>
  *       </HeaderAction.Hoist>
  *     </div>
  *   );
  * }
  *
  * In this example, the `MainContent` component hoists two buttons to the `Header` component.
- * The buttons are rendered in the order specified by the `order` prop.
+ * The buttons are rendered in the order specified by the `priority` prop.
  *
  * @returns An object containing the `Provider`, `Slot`, and `Hoist` components.
  */
 export const createHoistableComponent = () => {
-  type Entry = Readonly<{ key: symbol; node: ReactNode; order: number }>;
+  type Entry = Readonly<{ key: symbol; node: ReactNode; priority: number }>;
   type Snapshot = readonly Entry[];
 
   type Store = {
     getSnapshot: () => Snapshot;
     subscribe: (l: () => void) => () => void;
-    upsert: (key: symbol, node: ReactNode, order: number) => void;
+    upsert: (key: symbol, node: ReactNode, priority: number) => void;
     remove: (key: symbol) => void;
   };
 
   const createLiftStore = (): Store => {
-    const map = new Map<symbol, { node: ReactNode; order: number }>();
+    const map = new Map<symbol, { node: ReactNode; priority: number }>();
     const listeners = new Set<() => void>();
 
     const notify = () => {
@@ -74,9 +77,9 @@ export const createHoistableComponent = () => {
 
     const getSnapshot = (): Snapshot => {
       const entries = Array.from(map.entries()).map(
-        ([key, v]) => ({ key, node: v.node, order: v.order }) as Entry,
+        ([key, v]) => ({ key, node: v.node, priority: v.priority }) as Entry,
       );
-      return entries.sort((a, b) => a.order - b.order);
+      return entries.sort((a, b) => a.priority - b.priority);
     };
 
     const subscribe = (l: () => void): (() => void) => {
@@ -84,12 +87,12 @@ export const createHoistableComponent = () => {
       return () => listeners.delete(l);
     };
 
-    const upsert = (key: symbol, node: ReactNode, order: number): void => {
+    const upsert = (key: symbol, node: ReactNode, priority: number): void => {
       const prev = map.get(key);
-      if (prev && prev.node === node && prev.order === order) {
+      if (prev && prev.node === node && prev.priority === priority) {
         return;
       }
-      map.set(key, { node, order });
+      map.set(key, { node, priority });
       notify();
     };
 
@@ -110,7 +113,7 @@ export const createHoistableComponent = () => {
     const s = useContext(LiftStoreContext);
     if (!s) {
       throw new Error(
-        "SlotProvider not found. Please wrap your component tree with <SlotProvider>.",
+        "Provider not found. Please wrap your component tree with a Provider component.",
       );
     }
     return s;
@@ -125,7 +128,7 @@ export const createHoistableComponent = () => {
   };
 
   /**
-   * Component that renders all hoisted nodes in order.
+   * Component that renders all hoisted nodes in priority order.
    */
   const Slot = (): JSX.Element | null => {
     const store = useLiftStore();
