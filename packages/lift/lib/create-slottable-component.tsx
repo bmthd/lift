@@ -55,7 +55,7 @@ export interface HoistProps extends PropsWithChildren {
  * @returns An object containing the `Provider`, `Slot`, and `Hoist` components.
  */
 export const createHoistableComponent = () => {
-  type Entry = Readonly<{ key: symbol; node: ReactNode; priority: number }>;
+  type Entry = Readonly<{ key: symbol; keyId: string; node: ReactNode; priority: number }>;
   type Snapshot = readonly Entry[];
 
   type Store = {
@@ -66,8 +66,9 @@ export const createHoistableComponent = () => {
   };
 
   const createLiftStore = (): Store => {
-    const map = new Map<symbol, { node: ReactNode; priority: number }>();
+    const map = new Map<symbol, { node: ReactNode; priority: number; keyId: string }>();
     const listeners = new Set<() => void>();
+    let keyCounter = 0;
 
     const notify = () => {
       for (const listener of listeners) {
@@ -77,7 +78,7 @@ export const createHoistableComponent = () => {
 
     const getSnapshot = (): Snapshot => {
       const entries = Array.from(map.entries()).map(
-        ([key, v]) => ({ key, node: v.node, priority: v.priority }) as Entry,
+        ([key, v]) => ({ key, keyId: v.keyId, node: v.node, priority: v.priority }) as Entry,
       );
       return entries.sort((a, b) => a.priority - b.priority);
     };
@@ -92,7 +93,8 @@ export const createHoistableComponent = () => {
       if (prev && prev.node === node && prev.priority === priority) {
         return;
       }
-      map.set(key, { node, priority });
+      const keyId = prev?.keyId || `lift-${++keyCounter}`;
+      map.set(key, { node, priority, keyId });
       notify();
     };
 
@@ -138,8 +140,8 @@ export const createHoistableComponent = () => {
     }
     return (
       <>
-        {snap.map(({ key, node }) => (
-          <Fragment key={String(key)}>{node}</Fragment>
+        {snap.map(({ keyId, node }) => (
+          <Fragment key={keyId}>{node}</Fragment>
         ))}
       </>
     );
