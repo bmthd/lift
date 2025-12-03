@@ -90,9 +90,6 @@ export const createHoistableComponent = () => {
 
     const upsert = (key: symbol, node: ReactNode, priority: number): void => {
       const prev = map.get(key);
-      if (prev && prev.node === node && prev.priority === priority) {
-        return;
-      }
       const keyId = prev?.keyId || `lift-${++keyCounter}`;
       map.set(key, { node, priority, keyId });
       notify();
