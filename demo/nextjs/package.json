@@ -11,7 +11,7 @@
   "dependencies": {
     "react": "^19",
     "react-dom": "^19",
-    "next": "15.5.3",
+    "next": "15.5.7",
     "@bmthd/lift": "workspace:*"
   },
   "devDependencies": {
@@ -22,7 +22,7 @@
     "@tailwindcss/postcss": "latest",
     "tailwindcss": "^3.4.1",
     "eslint": "^8",
-    "eslint-config-next": "15.5.3",
+    "eslint-config-next": "15.5.7",
     "@eslint/eslintrc": "^3"
   }
 }
