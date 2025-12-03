@@ -78,7 +78,7 @@ export const createHoistableComponent = () => {
 
     const getSnapshot = (): Snapshot => {
       const entries = Array.from(map.entries()).map(
-        ([key, v]) => ({ key, keyId: v.keyId, node: v.node, priority: v.priority }) as Entry,
+        ([key, v]) => ({ key, keyId: v.keyId, node: v.node, priority: v.priority }),
       );
       return entries.sort((a, b) => {
         // Primary sort: priority (lower numbers first)
