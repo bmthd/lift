@@ -80,7 +80,15 @@ export const createHoistableComponent = () => {
       const entries = Array.from(map.entries()).map(
         ([key, v]) => ({ key, keyId: v.keyId, node: v.node, priority: v.priority }) as Entry,
       );
-      return entries.sort((a, b) => a.priority - b.priority);
+      return entries.sort((a, b) => {
+        // Primary sort: priority (lower numbers first)
+        const priorityDiff = a.priority - b.priority;
+        if (priorityDiff !== 0) {
+          return priorityDiff;
+        }
+        // Secondary sort: insertion order via keyId (stable sort)
+        return a.keyId.localeCompare(b.keyId, undefined, { numeric: true });
+      });
     };
 
     const subscribe = (l: () => void): (() => void) => {
