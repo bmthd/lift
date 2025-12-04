@@ -16,26 +16,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <div className="min-h-screen flex flex-col">
-          <Providers>
+          <HeaderAction.Provider>
             <Header />
-            <div className="flex flex-1">
+          </HeaderAction.Provider>
+          <div className="flex flex-1">
+            <SidebarContent.Provider>
               <Sidebar />
-              <main className="flex-1 p-6">{children}</main>
-            </div>
+            </SidebarContent.Provider>
+            <main className="flex-1 p-6">{children}</main>
+          </div>
+          <FooterContent.Provider>
             <Footer />
-          </Providers>
+          </FooterContent.Provider>
         </div>
       </body>
     </html>
   );
 }
-
-const Providers = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <HeaderAction.Provider>
-      <SidebarContent.Provider>
-        <FooterContent.Provider>{children}</FooterContent.Provider>
-      </SidebarContent.Provider>
-    </HeaderAction.Provider>
-  );
-};
