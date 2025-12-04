@@ -28,7 +28,8 @@
     "lint:test": "biome lint ./packages",
     "lint:safe-fix": "biome check --apply ./packages",
     "lint:fix": "biome check --apply-unsafe ./packages",
-    "test": "bun run --filter packages/* test"
+    "test": "bun run --filter packages/* test",
+    "typecheck": "bun run --filter packages/* typecheck"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
@@ -44,5 +45,6 @@
     "vite": "^7.0.0",
     "vite-plugin-dts": "^4.0.0",
     "vitest": "^3.0.0"
-  }
+  },
+  "packageManager": "bun@1.2.20"
 }

@@ -36,6 +36,7 @@
     "lint:safe-fix": "biome check --apply ./lib",
     "lint:fix": "biome check --apply-unsafe ./lib",
     "test": "vitest",
+    "typecheck": "bunx @typescript/native-preview --noemit",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
