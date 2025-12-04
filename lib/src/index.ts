@@ -1,2 +1,2 @@
-export { createHoistableComponent } from "./create-slottable-component";
-export type { ProviderProps, HoistProps } from "./create-slottable-component";
+export { createHoistableComponent } from "./create-hoistable-component";
+export type { ProviderProps, HoistProps } from "./create-hoistable-component";

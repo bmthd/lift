@@ -29,7 +29,6 @@
   },
   "sideEffects": false,
   "scripts": {
-    "dev": "vite",
     "build": "tsdown",
     "format:test": "biome format ./src",
     "format:fix": "biome format --write ./src",
@@ -46,12 +45,9 @@
     "@testing-library/react": "^16.0.0",
     "@types/node": "^24.0.0",
     "@types/react": "19.2.7",
-    "@vitejs/plugin-react": "^5.0.0",
     "happy-dom": "^20.0.0",
     "tsdown": "^0.17.0-beta.6",
     "typescript": "^5.4.5",
-    "vite": "^7.0.0",
-    "vite-plugin-dts": "^4.0.0",
     "vitest": "^4.0.0"
   },
   "peerDependencies": {
