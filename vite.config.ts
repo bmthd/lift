@@ -6,7 +6,10 @@ import react from "@vitejs/plugin-react";
 import { name } from "./package.json";
 
 export default defineConfig({
-  plugins: [dts(), react()],
+  plugins: [
+    ...(process.env.VITEST ? [] : [dts()]),
+    react(),
+  ],
   build: {
     lib: {
       entry: resolve(__dirname, "./lib/index.ts"),

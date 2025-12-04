@@ -7,7 +7,7 @@
     "indentWidth": 2,
     "lineWidth": 100,
     "lineEnding": "lf",
-    "includes": ["**", "!**/node_modules", "!**/pnpm-lock.yaml"]
+    "includes": ["**", "!**/node_modules", "!**/pnpm-lock.yaml", "!**/dist"]
   },
   "javascript": {
     "formatter": {
@@ -29,6 +29,6 @@
   "linter": {
     "enabled": true,
     "rules": {},
-    "includes": ["**", "!**/node_modules", "!**/pnpm-lock.yaml"]
+    "includes": ["**", "!**/node_modules", "!**/pnpm-lock.yaml", "!**/dist"]
   }
 }

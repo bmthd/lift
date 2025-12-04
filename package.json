@@ -21,15 +21,15 @@
   ],
   "scripts": {
     "build": "bun run build:packages",
-    "build:packages": "bun run --filter packages/* build",
+    "build:packages": "bun run --filter @bmthd/lift build",
     "dev": "bun run --filter demo/* dev",
-    "format:test": "biome format ./packages",
-    "format:fix": "biome format --write ./packages",
-    "lint:test": "biome lint ./packages",
-    "lint:safe-fix": "biome check --apply ./packages",
-    "lint:fix": "biome check --apply-unsafe ./packages",
-    "test": "bun run --filter packages/* test",
-    "typecheck": "bun run --filter packages/* typecheck"
+    "format:test": "biome format ./lib",
+    "format:fix": "biome format --write ./lib",
+    "lint:test": "biome lint ./lib",
+    "lint:safe-fix": "biome check --apply ./lib",
+    "lint:fix": "biome check --apply-unsafe ./lib",
+    "test": "bun run --filter @bmthd/lift test",
+    "typecheck": "bun run --filter @bmthd/lift typecheck"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
