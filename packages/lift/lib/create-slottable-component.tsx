@@ -8,7 +8,8 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useSyncExternalStore,
+  useState,
+  useCallback,
 } from "react";
 
 export interface ProviderProps extends PropsWithChildren {}
@@ -56,81 +57,66 @@ export interface HoistProps extends PropsWithChildren {
  */
 export const createHoistableComponent = () => {
   type Entry = Readonly<{ key: symbol; keyId: string; node: ReactNode; priority: number }>;
-  type Snapshot = readonly Entry[];
 
   type Store = {
-    getSnapshot: () => Snapshot;
-    subscribe: (l: () => void) => () => void;
+    entries: Entry[];
     upsert: (key: symbol, node: ReactNode, priority: number) => void;
     remove: (key: symbol) => void;
-  };
-
-  const createLiftStore = (): Store => {
-    const map = new Map<symbol, { node: ReactNode; priority: number; keyId: string }>();
-    const listeners = new Set<() => void>();
-    let keyCounter = 0;
-
-    const notify = () => {
-      for (const listener of listeners) {
-        listener();
-      }
-    };
-
-    const getSnapshot = (): Snapshot => {
-      const entries = Array.from(map.entries()).map(
-        ([key, v]) => ({ key, keyId: v.keyId, node: v.node, priority: v.priority }),
-      );
-      return entries.sort((a, b) => {
-        // Primary sort: priority (lower numbers first)
-        const priorityDiff = a.priority - b.priority;
-        if (priorityDiff !== 0) {
-          return priorityDiff;
-        }
-        // Secondary sort: insertion order via keyId (stable sort)
-        return a.keyId.localeCompare(b.keyId, undefined, { numeric: true });
-      });
-    };
-
-    const subscribe = (l: () => void): (() => void) => {
-      listeners.add(l);
-      return () => listeners.delete(l);
-    };
-
-    const upsert = (key: symbol, node: ReactNode, priority: number): void => {
-      const prev = map.get(key);
-      const keyId = prev?.keyId || `lift-${++keyCounter}`;
-      map.set(key, { node, priority, keyId });
-      notify();
-    };
-
-    const remove = (key: symbol): void => {
-      if (!map.has(key)) {
-        return;
-      }
-      map.delete(key);
-      notify();
-    };
-
-    return { getSnapshot, subscribe, upsert, remove };
   };
 
   const LiftStoreContext = createContext<Store | null>(null);
 
   const useLiftStore = (): Store => {
-    const s = useContext(LiftStoreContext);
-    if (!s) {
+    const store = useContext(LiftStoreContext);
+    if (!store) {
       throw new Error(
         "Hoistable Provider not found. Please wrap your component tree with `<Hoistable.Provider>` (e.g. `<HeaderAction.Provider>`).",
       );
     }
-    return s;
+    return store;
   };
 
   /**
    * Provider component for the hoistable component.
    */
   const Provider = ({ children }: ProviderProps): JSX.Element => {
-    const store = useMemo(() => createLiftStore(), []);
+    const [entries, setEntries] = useState<Entry[]>([]);
+    const keyCounterRef = useRef(0);
+
+    const upsert = useCallback((key: symbol, node: ReactNode, priority: number): void => {
+      setEntries((prevEntries) => {
+        const existingIndex = prevEntries.findIndex((entry) => entry.key === key);
+        let keyId: string;
+        
+        if (existingIndex >= 0) {
+          keyId = prevEntries[existingIndex].keyId;
+        } else {
+          keyId = `lift-${++keyCounterRef.current}`;
+        }
+
+        const newEntry: Entry = { key, keyId, node, priority };
+        const newEntries = existingIndex >= 0 
+          ? prevEntries.map((entry, index) => index === existingIndex ? newEntry : entry)
+          : [...prevEntries, newEntry];
+
+        return newEntries.sort((a, b) => {
+          // Primary sort: priority (lower numbers first)
+          const priorityDiff = a.priority - b.priority;
+          if (priorityDiff !== 0) {
+            return priorityDiff;
+          }
+          // Secondary sort: insertion order via keyId (stable sort)
+          return a.keyId.localeCompare(b.keyId, undefined, { numeric: true });
+        });
+      });
+    }, []);
+
+    const remove = useCallback((key: symbol): void => {
+      setEntries((prevEntries) => prevEntries.filter((entry) => entry.key !== key));
+    }, []);
+
+    const store = useMemo(() => ({ entries, upsert, remove }), [entries, upsert, remove]);
+
     return <LiftStoreContext.Provider value={store}>{children}</LiftStoreContext.Provider>;
   };
 
@@ -138,14 +124,15 @@ export const createHoistableComponent = () => {
    * Component that renders all hoisted nodes in priority order.
    */
   const Slot = (): JSX.Element | null => {
-    const store = useLiftStore();
-    const snap = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getSnapshot);
-    if (snap.length === 0) {
+    const { entries } = useLiftStore();
+    
+    if (entries.length === 0) {
       return null;
     }
+    
     return (
       <>
-        {snap.map(({ keyId, node }) => (
+        {entries.map(({ keyId, node }) => (
           <Fragment key={keyId}>{node}</Fragment>
         ))}
       </>
@@ -156,8 +143,9 @@ export const createHoistableComponent = () => {
    * Component that hoists its children to the corresponding Slot component.
    */
   const Hoist = ({ children, priority = 0 }: HoistProps): JSX.Element | null => {
-    const store = useLiftStore();
+    const { upsert, remove } = useLiftStore();
     const keyRef = useRef<symbol>();
+    
     if (!keyRef.current) {
       keyRef.current = Symbol("hoist-entry");
     }
@@ -166,14 +154,14 @@ export const createHoistableComponent = () => {
       if (!keyRef.current) {
         return;
       }
-      store.upsert(keyRef.current, children, priority);
+      upsert(keyRef.current, children, priority);
       return () => {
         if (!keyRef.current) {
           return;
         }
-        store.remove(keyRef.current);
+        remove(keyRef.current);
       };
-    }, [children, priority, store]);
+    }, [children, priority, upsert, remove]);
 
     return null;
   };
