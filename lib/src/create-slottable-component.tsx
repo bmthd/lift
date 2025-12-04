@@ -12,9 +12,12 @@ import {
   useCallback,
 } from "react";
 
-export interface ProviderProps extends PropsWithChildren {}
+export interface ProviderProps {
+  children?: React.ReactNode;
+}
 
-export interface HoistProps extends PropsWithChildren {
+export interface HoistProps {
+  children?: React.ReactNode;
   /**
    * The priority of the hoisted node. Nodes with lower priority values are rendered first.
    */

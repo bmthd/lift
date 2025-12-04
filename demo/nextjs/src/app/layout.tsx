@@ -1,27 +1,25 @@
 import type { Metadata } from "next";
-import { Header, HeaderActionProvider } from "./components/header";
+import { Header, HeaderAction } from "./components/header";
 import "./globals.css";
-import type { PropsWithChildren } from "react";
-import { Footer } from "./components/footer";
-import { FooterContentProvider } from "./components/footer/footer";
-import { Sidebar } from "./components/sidebar";
-import { SidebarContentProvider } from "./components/sidebar/sidebar";
+import type { PropsWithChildren, ReactNode } from "react";
+import { Footer, FooterContent } from "./components/footer";
+import { Sidebar, SidebarContent } from "./components/sidebar";
 
 export const metadata: Metadata = {
   title: "createHoistableComponent Demo",
   description: "Demo of createHoistableComponent from lift library",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-gray-50">
         <Providers>
           <div className="min-h-screen flex flex-col">
             <Header />
             <div className="flex flex-1">
               <Sidebar />
-              <main className="flex-1 p-6">{children}</main>
+              <main className="flex-1 p-8 overflow-auto">{children}</main>
             </div>
             <Footer />
           </div>
@@ -35,10 +33,10 @@ interface ProvidersProps extends PropsWithChildren {}
 
 const Providers = ({ children }: ProvidersProps) => {
   return (
-    <HeaderActionProvider>
-      <SidebarContentProvider>
-        <FooterContentProvider>{children}</FooterContentProvider>
-      </SidebarContentProvider>
-    </HeaderActionProvider>
+    <HeaderAction.Provider>
+      <SidebarContent.Provider>
+        <FooterContent.Provider>{children}</FooterContent.Provider>
+      </SidebarContent.Provider>
+    </HeaderAction.Provider>
   );
 };
