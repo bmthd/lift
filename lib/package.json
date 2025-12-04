@@ -52,7 +52,7 @@
     "typescript": "^5.4.5",
     "vite": "^7.0.0",
     "vite-plugin-dts": "^4.0.0",
-    "vitest": "^3.0.0"
+    "vitest": "^4.0.0"
   },
   "peerDependencies": {
     "react": ">=17.0.0",
