@@ -41,21 +41,24 @@ jobs:
           cd demo/nextjs && bun install
           
       - name: Setup Pages
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
         with:
           static_site_generator: next
-          
+
       - name: Build with Next.js
         run: |
           cd demo/nextjs
           bun run build
-          
+
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./demo/nextjs/out
 
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
