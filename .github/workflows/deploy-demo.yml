@@ -39,7 +39,10 @@ jobs:
         run: |
           bun install
           cd demo/nextjs && bun install
-          
+
+      - name: Build lib package
+        run: cd lib && bun run build
+
       - name: Setup Pages
         if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
