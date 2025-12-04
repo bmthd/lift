@@ -1,4 +1,4 @@
-import { HeaderAction } from "../header";
+import { HeaderActionHoist, HeaderActionProvider, HeaderActionSlot } from "../header";
 
 export function PriorityExample() {
   return (
@@ -11,29 +11,29 @@ export function PriorityExample() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="border p-4 rounded">
           <h3 className="font-semibold mb-2">Priority 3 (Last)</h3>
-          <HeaderAction.Hoist priority={3}>
+          <HeaderActionHoist priority={3}>
             <button type="button" className="bg-red-500 text-white px-3 py-1 rounded text-sm">
               Third
             </button>
-          </HeaderAction.Hoist>
+          </HeaderActionHoist>
         </div>
 
         <div className="border p-4 rounded">
           <h3 className="font-semibold mb-2">Priority 1 (First)</h3>
-          <HeaderAction.Hoist priority={1}>
+          <HeaderActionHoist priority={1}>
             <button type="button" className="bg-green-500 text-white px-3 py-1 rounded text-sm">
               First
             </button>
-          </HeaderAction.Hoist>
+          </HeaderActionHoist>
         </div>
 
         <div className="border p-4 rounded">
           <h3 className="font-semibold mb-2">Priority 2 (Middle)</h3>
-          <HeaderAction.Hoist priority={2}>
+          <HeaderActionHoist priority={2}>
             <button type="button" className="bg-blue-500 text-white px-3 py-1 rounded text-sm">
               Second
             </button>
-          </HeaderAction.Hoist>
+          </HeaderActionHoist>
         </div>
       </div>
     </div>

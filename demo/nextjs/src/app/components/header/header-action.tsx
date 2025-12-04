@@ -2,4 +2,8 @@
 
 import { createHoistableComponent } from "@bmthd/lift";
 
-export const HeaderAction = createHoistableComponent();
+export const {
+  Provider: HeaderActionProvider,
+  Slot: HeaderActionSlot,
+  Hoist: HeaderActionHoist
+} = createHoistableComponent();

@@ -2,4 +2,8 @@
 
 import { createHoistableComponent } from "@bmthd/lift";
 
-export const SidebarContent = createHoistableComponent();
+export const { 
+  Provider: SidebarContentProvider,
+  Slot: SidebarContentSlot,
+  Hoist: SidebarContentHoist
+} = createHoistableComponent();

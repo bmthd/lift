@@ -1,4 +1,4 @@
-import { FooterContent } from "./footer";
+import { FooterContentSlot } from "./footer";
 
 export function Footer() {
   return (
@@ -6,9 +6,11 @@ export function Footer() {
       <div className="flex justify-between items-center">
         <p>&copy; 2024 Demo App</p>
         <div className="flex gap-2">
-          <FooterContent.Slot />
+          <FooterContentSlot />
         </div>
       </div>
     </footer>
   );
 }
+
+export { FooterContentProvider, FooterContentSlot, FooterContentHoist } from "./footer";

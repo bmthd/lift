@@ -1,4 +1,4 @@
-import { HeaderAction } from "./header-action";
+import { HeaderActionSlot } from "./header-action";
 
 export function Header() {
   return (
@@ -6,11 +6,11 @@ export function Header() {
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-bold">createHoistableComponent Demo</h1>
         <div className="flex gap-2">
-          <HeaderAction.Slot />
+          <HeaderActionSlot />
         </div>
       </div>
     </header>
   );
 }
 
-export { HeaderAction } from "./header-action";
+export { HeaderActionProvider, HeaderActionSlot, HeaderActionHoist } from "./header-action";

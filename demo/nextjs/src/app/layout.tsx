@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Header, HeaderAction } from "./components/header";
+import { Header, HeaderActionProvider } from "./components/header";
 import "./globals.css";
-import { FooterContent } from "./components/footer/footer";
-import { SidebarContent } from "./components/sidebar/sidebar";
+import type { PropsWithChildren } from "react";
 import { Footer } from "./components/footer";
+import { FooterContentProvider } from "./components/footer/footer";
 import { Sidebar } from "./components/sidebar";
+import { SidebarContentProvider } from "./components/sidebar/sidebar";
 
 export const metadata: Metadata = {
   title: "createHoistableComponent Demo",
@@ -15,21 +16,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <div className="min-h-screen flex flex-col">
-          <HeaderAction.Provider>
+        <Providers>
+          <div className="min-h-screen flex flex-col">
             <Header />
-          </HeaderAction.Provider>
-          <div className="flex flex-1">
-            <SidebarContent.Provider>
+            <div className="flex flex-1">
               <Sidebar />
-            </SidebarContent.Provider>
-            <main className="flex-1 p-6">{children}</main>
-          </div>
-          <FooterContent.Provider>
+              <main className="flex-1 p-6">{children}</main>
+            </div>
             <Footer />
-          </FooterContent.Provider>
-        </div>
+          </div>
+        </Providers>
       </body>
     </html>
   );
 }
+
+interface ProvidersProps extends PropsWithChildren {}
+
+const Providers = ({ children }: ProvidersProps) => {
+  return (
+    <HeaderActionProvider>
+      <SidebarContentProvider>
+        <FooterContentProvider>{children}</FooterContentProvider>
+      </SidebarContentProvider>
+    </HeaderActionProvider>
+  );
+};
