@@ -4,20 +4,17 @@ import {
   type JSX,
   type PropsWithChildren,
   type ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
-  useCallback,
 } from "react";
 
-export interface ProviderProps {
-  children?: React.ReactNode;
-}
+export interface ProviderProps extends PropsWithChildren {}
 
-export interface HoistProps {
-  children?: React.ReactNode;
+export interface HoistProps extends PropsWithChildren {
   /**
    * The priority of the hoisted node. Nodes with lower priority values are rendered first.
    */
@@ -26,37 +23,38 @@ export interface HoistProps {
 
 /**
  * Creates a set of components to hoist and slot React nodes.
+ *
+ * @returns An object containing the `Provider`, `Slot`, and `Hoist` components.
+ *
  * @example
- * const HeaderAction = createHoistableComponent();
+ * const { Provider, Slot, Hoist } = createHoistableComponent();
  *
  * function App() {
  *   return (
- *     <HeaderAction.Provider>
+ *     <Provider>
  *       <Header>
- *         <HeaderAction.Slot />
+ *         <Slot />
  *       </Header>
  *       <MainContent />
- *     </HeaderAction.Provider>
+ *     </Provider>
  *   );
  * }
  *
  * function MainContent() {
  *   return (
  *     <div>
- *       <HeaderAction.Hoist priority={1}>
+ *       <Hoist priority={1}>
  *         <button>This button renders in the header</button>
- *       </HeaderAction.Hoist>
- *       <HeaderAction.Hoist priority={2}>
+ *       </Hoist>
+ *       <Hoist priority={2}>
  *         <button>This button renders second</button>
- *       </HeaderAction.Hoist>
+ *       </Hoist>
  *     </div>
  *   );
  * }
  *
- * In this example, the `MainContent` component hoists two buttons to the `Header` component.
- * The buttons are rendered in the order specified by the `priority` prop.
- *
- * @returns An object containing the `Provider`, `Slot`, and `Hoist` components.
+ * // In this example, the `MainContent` component hoists two buttons to the `Header` component.
+ * // The buttons are rendered in the order specified by the `priority` prop.
  */
 export const createHoistableComponent = () => {
   type Entry = Readonly<{ key: symbol; keyId: string; node: ReactNode; priority: number }>;
@@ -90,7 +88,7 @@ export const createHoistableComponent = () => {
       setEntries((prevEntries) => {
         const existingIndex = prevEntries.findIndex((entry) => entry.key === key);
         let keyId: string;
-        
+
         if (existingIndex >= 0) {
           keyId = prevEntries[existingIndex].keyId;
         } else {
@@ -98,9 +96,10 @@ export const createHoistableComponent = () => {
         }
 
         const newEntry: Entry = { key, keyId, node, priority };
-        const newEntries = existingIndex >= 0 
-          ? prevEntries.map((entry, index) => index === existingIndex ? newEntry : entry)
-          : [...prevEntries, newEntry];
+        const newEntries =
+          existingIndex >= 0
+            ? prevEntries.map((entry, index) => (index === existingIndex ? newEntry : entry))
+            : [...prevEntries, newEntry];
 
         return newEntries.sort((a, b) => {
           // Primary sort: priority (lower numbers first)
@@ -128,11 +127,11 @@ export const createHoistableComponent = () => {
    */
   const Slot = (): JSX.Element | null => {
     const { entries } = useLiftStore();
-    
+
     if (entries.length === 0) {
       return null;
     }
-    
+
     return (
       <>
         {entries.map(({ keyId, node }) => (
@@ -147,8 +146,8 @@ export const createHoistableComponent = () => {
    */
   const Hoist = ({ children, priority = 0 }: HoistProps): JSX.Element | null => {
     const { upsert, remove } = useLiftStore();
-    const keyRef = useRef<symbol>();
-    
+    const keyRef = useRef<symbol>(null);
+
     if (!keyRef.current) {
       keyRef.current = Symbol("hoist-entry");
     }
