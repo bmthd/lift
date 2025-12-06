@@ -1,0 +1,1 @@
+export * as FooterContent from "./footer";
