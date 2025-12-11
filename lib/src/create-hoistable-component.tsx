@@ -146,21 +146,11 @@ export const createHoistableComponent = () => {
    */
   const Hoist = ({ children, priority = 0 }: HoistProps): JSX.Element | null => {
     const { upsert, remove } = useLiftStore();
-    const keyRef = useRef<symbol>(null);
-
-    if (!keyRef.current) {
-      keyRef.current = Symbol("hoist-entry");
-    }
+    const keyRef = useRef<symbol>(Symbol("hoist-entry"));
 
     useEffect(() => {
-      if (!keyRef.current) {
-        return;
-      }
       upsert(keyRef.current, children, priority);
       return () => {
-        if (!keyRef.current) {
-          return;
-        }
         remove(keyRef.current);
       };
     }, [children, priority, upsert, remove]);
