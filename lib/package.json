@@ -46,7 +46,7 @@
     "@types/node": "^24.0.0",
     "@types/react": "19.2.7",
     "happy-dom": "^20.0.0",
-    "tsdown": "^0.17.0-beta.6",
+    "tsdown": "^0.18.0",
     "typescript": "^5.4.5",
     "vitest": "^4.0.0"
   },
