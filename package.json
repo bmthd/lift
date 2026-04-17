@@ -41,7 +41,7 @@
     "happy-dom": "^20.0.0",
     "@bmthd/lift": "workspace:*",
     "tsdown": "^0.17.0-beta.6",
-    "typescript": "^5.4.5",
+    "typescript": "^6.0.0",
     "vite": "^8.0.0",
     "vite-plugin-dts": "^4.0.0",
     "vitest": "^4.0.0"
