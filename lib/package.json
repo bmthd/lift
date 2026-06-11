@@ -43,7 +43,7 @@
     "@biomejs/biome": "^2.2.4",
     "@testing-library/jest-dom": "^6.4.5",
     "@testing-library/react": "^16.0.0",
-    "@types/node": "^24.0.0",
+    "@types/node": "^25.0.0",
     "@types/react": "19.2.7",
     "happy-dom": "^20.0.0",
     "tsdown": "^0.17.0-beta.6",
