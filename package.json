@@ -37,7 +37,7 @@
     "@testing-library/react": "^16.0.0",
     "@types/node": "^24.0.0",
     "@types/react": "^18.3.2",
-    "@vitejs/plugin-react": "^5.0.0",
+    "@vitejs/plugin-react": "^6.0.0",
     "happy-dom": "^20.0.0",
     "@bmthd/lift": "workspace:*",
     "tsdown": "^0.17.0-beta.6",
